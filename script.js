@@ -26,8 +26,13 @@ let banco = [
 
 //Aqui estamos simulando um banco de dados
 
+const getBanco = () => JSON.parse(localStorage.getItem('todo')) ?? [];
+const setBanco = (banco) => localStorage.setItem('todo', JSON.stringify(banco))
+//Colocando dados no local storage
+
 const atualizarTela = () => {
     limparTarefas();
+    const banco = getBanco();
     banco.forEach( (item, indice) => criarItem(item.tarefa, item.status, indice));
 }
 
@@ -46,7 +51,9 @@ const inserirItem = (evento) => {
     const tecla = evento.key //Uma variável para descobrir qual tecla foi pressionada
     const texto = evento.target.value
     if (tecla === 'Enter') {
+        const banco = getBanco()
         banco.push({"tarefa": texto, "status": ""})
+        setBanco(banco)
         atualizarTela()
         evento.target.value = ''; //Para limpar a tarefa
     }
@@ -57,7 +64,16 @@ document.getElementById("novo_item").addEventListener('keypress',inserirItem);
 //Aqui estamos fazendo a barra para inserir nova tarefa
 
 const removerItem = (indice) => {
+    const banco = getBanco()
     banco.splice (indice, 1) //Recortar um array
+    setBanco(banco)
+    atualizarTela()
+}
+
+const atualizarItem = (indice) => {
+    const banco = getBanco()
+    banco[indice].status = banco[indice].status === '' ? 'checked' : ''; //Para atualizar o checked
+    setBanco(banco)
     atualizarTela()
 }
 
@@ -66,14 +82,15 @@ const clickItem = (evento) => {
     if (elemento.type === 'button') {
         const indice = elemento.dataset.indice //Propriedade para pegar o indice
         removerItem(indice)
+    } else if (elemento.type === 'checkbox') {
+        const indice = elemento.dataset.indice;
+        atualizarItem (indice)
     }
 }
 document.getElementById("todo_list").addEventListener('click', clickItem)
 
 //Serve para descobrir qual tarefa está clicando e tem ligação com o "indice"
 //Serve para apagar o item que foi selecionado
-
-
 
 atualizarTela();
 
