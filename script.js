@@ -2,14 +2,14 @@
 
 //Preciso estudar esse use strict
 
-const criarItem = (tarefa, status) => {
+const criarItem = (tarefa, status, indice) => {
     const item = document.createElement('label');
     item.classList.add('todoitem')
     item.innerHTML = `
-    <input type="checkbox" ${status}>
-    <div>${tarefa}</div>
-    <input type="button" value="X">
-    `
+    <input type="checkbox" ${status} data-indice=${indice}> 
+    <div>${tarefa}</div data-indice="2">
+    <input type="button" value="X" data-indice=${indice}>
+    `;
     
     
     document.getElementById('todo_list').appendChild(item);
@@ -18,6 +18,7 @@ const criarItem = (tarefa, status) => {
 //Ele faz um arrow function para criar um elemento igual ao do HTML
 //Utilizando ${} ele consegue colocar uma espécie de variável
 //Status e nem tarefa precisa ser declarada apenas coloque
+//Indice serve para ver qual das tarefas ele está apontando
 
 let banco = [ 
     {"tarefa": "Estudar JS", "status": ""}
@@ -27,7 +28,7 @@ let banco = [
 
 const atualizarTela = () => {
     limparTarefas();
-    banco.forEach(item => criarItem(item.tarefa, item.status));
+    banco.forEach( (item, indice) => criarItem(item.tarefa, item.status, indice));
 }
 
 //Aqui estamos fazendo uma função para que toda vez que se cria algo vai para o banco de dados
@@ -55,14 +56,22 @@ document.getElementById("novo_item").addEventListener('keypress',inserirItem);
 
 //Aqui estamos fazendo a barra para inserir nova tarefa
 
+const removerItem = (indice) => {
+    banco.splice (indice, 1) //Recortar um array
+    atualizarTela()
+}
+
 const clickItem = (evento) => {
     const elemento = evento.target //Qual elemento foi clicado
-    
+    if (elemento.type === 'button') {
+        const indice = elemento.dataset.indice //Propriedade para pegar o indice
+        removerItem(indice)
+    }
 }
 document.getElementById("todo_list").addEventListener('click', clickItem)
 
-
-
+//Serve para descobrir qual tarefa está clicando e tem ligação com o "indice"
+//Serve para apagar o item que foi selecionado
 
 
 
