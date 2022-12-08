@@ -78,6 +78,7 @@ body {
     width: 35px;
     height: 35px;
     font: inherit;
+    
 }
 
 
@@ -113,5 +114,31 @@ body {
 
 
 @media screen and (max-width: 700px) {
-    
+    .titulo {
+        font-size: 20px;
+        width: 90%;
+        height: 80%;
+    }
+
+    .novoitem {
+        width: 300px;
+        height: 50px;
+    }
+
+    .novoitem > input::placeholder {
+        font-size: 15px;
+    }
+
+    .todolist {
+        width: 250px;
+        height: 50px;
+        margin-top: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .todo {
+        width: fit-content;
+    }
 }
